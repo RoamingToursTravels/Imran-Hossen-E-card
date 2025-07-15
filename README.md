@@ -1,30 +1,28 @@
-# Imran Hossen - Digital Business Card
+# E-Card - Digital Business Card
 
 ## 📋 Project Overview
 
-A modern, responsive digital business card for Imran Hossen, built with HTML5, CSS3, and JavaScript. Features dark mode toggle, smooth animations, contact saving functionality, and social media integration.
+A modern, responsive digital business card built with HTML5, CSS3, and JavaScript. Features dark mode toggle, smooth animations, contact saving functionality, and social media integration.
 
-**Name:** Imran Hossen  
-**Roles:** Executive Director at Mind Mentor Overseas Ltd | Head Of Business at Roaming Tours & Travels  
+**Author:** M S Kamran  
+**Organization:** Roaming BD  
 **Version:** 2.0.0  
 **Last Updated:** December 19, 2024
 
 ## 📁 Project Structure
 
 ```
-Imran Hossen E-card/
+e-card updated copy/
 ├── Photos/                    # Image assets
-│   ├── dark-pattern.svg      # Dark mode background pattern
-│   ├── employee.jpeg         # Profile image (Imran Hossen)
-│   ├── light-pattern.svg     # Light mode background pattern
-│   ├── RTTLOGO.png           # Roaming Tours & Travels logo
-│   └── Rlogo.png             # Mind Mentor Overseas logo
-├── index.html                # Main HTML file
+│   ├── DarkMOOD.png          # Dark mode background
+│   ├── Kamran.png            # Profile image
+│   ├── RTTLOGO.png           # Company logo
+│   ├── Rlogo.png             # Favicon
+│   └── RoamingBackground.jpg # Light mode background
+├── index.html               # Main HTML file
 ├── ecard.css                 # Stylesheet
 ├── ecard.js                  # JavaScript functionality
 ├── config.json               # Configuration data
-├── imran-hossen-contact.vcf  # vCard contact file
-├── .gitignore                # Git ignore file
 └── README.md                 # Documentation
 ```
 
@@ -74,21 +72,22 @@ Update social media profiles in `config.json`:
 
 ### 3. Image Assets
 
-Current images in the `Photos/` folder:
+Replace images in the `Photos/` folder:
 
-- **Profile Image:** `employee.jpeg` (Imran Hossen's photo)
-- **Company Logos:** `RTTLOGO.png` (Roaming Tours & Travels), `Rlogo.png` (Mind Mentor Overseas)
-- **Background Patterns:** `light-pattern.svg`, `dark-pattern.svg`
+- **Profile Image:** Replace `Kamran.png` with your photo
+- **Company Logo:** Replace `RTTLOGO.png` with your company logo
+- **Favicon:** Replace `Rlogo.png` with your favicon
+- **Backgrounds:** Replace `RoamingBackground.jpg` and `DarkMOOD.png`
 
-To customize, update paths in `config.json`:
+Update paths in `config.json`:
 
 ```json
 {
   "assets": {
     "companyLogo": "./Photos/your-logo.png",
-    "profileImage": "./Photos/your-photo.jpeg",
-    "lightBackground": "./Photos/light-pattern.svg",
-    "darkBackground": "./Photos/dark-pattern.svg",
+    "profileImage": "./Photos/your-photo.png",
+    "lightBackground": "./Photos/your-light-bg.jpg",
+    "darkBackground": "./Photos/your-dark-bg.png",
     "favicon": "./Photos/your-favicon.png"
   }
 }
@@ -185,34 +184,12 @@ const ECARD_CONFIG = {
 6. **Test** in browser
 7. **Deploy** to your web server
 
-## 🚀 Deployment
+## 📞 Support
 
-### GitHub Deployment
-1. Initialize git repository: `git init`
-2. Add files: `git add .`
-3. Commit: `git commit -m "Initial commit"`
-4. Add remote: `git remote add origin <your-repo-url>`
-5. Push: `git push -u origin main`
-
-### Netlify Deployment
-1. Connect your GitHub repository to Netlify
-2. Set build command: (leave empty for static site)
-3. Set publish directory: `/` (root directory)
-4. Deploy automatically on git push
-
-### Manual Deployment
-- Upload all files to your web server
-- Ensure `index.html` is in the root directory
-- All relative paths will work correctly
-
-## 📞 Contact Imran Hossen
-
-- **Office Phone:** +8801332547044
-- **Personal Phone:** +8801521334411
-- **Primary Email:** imranhossen.mindmentor@gmail.com
-- **Secondary Email:** imranhossen.rtt@gmail.com
-- **LinkedIn:** [Imran Hossen](https://www.linkedin.com/in/imran-hossen-5b5802318/)
-- **Facebook:** [Imran Hossen](https://www.facebook.com/imran.hossen.7796420)
+For questions or support, contact:
+- **Email:** mskamranroamingbd@gmail.com
+- **LinkedIn:** [M S Kamran](https://www.linkedin.com/in/mskamran23/)
+- **GitHub:** [MS-Kamran](https://github.com/MS-Kamran)
 
 ## 📄 License
 
@@ -220,6 +197,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-**Digital Business Card for Imran Hossen**  
-**Executive Director - Mind Mentor Overseas Ltd**  
-**Head Of Business - Roaming Tours & Travels**
+**Made with ❤️ by M S Kamran | Roaming BD**
