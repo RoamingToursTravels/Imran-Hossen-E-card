@@ -1,0 +1,52 @@
+{
+  "personal": {
+    "name": "Imran Hossen",
+    "organization": "Mind Mentor Overseas Ltd",
+    "title": "Executive Director (ED)",
+    "department": "Management",
+    "secondaryOrganization": "Roaming Tours & Travels",
+    "secondaryTitle": "Head Of Business (HOB)",
+    "officePhone": "8801332547044",
+    "personalPhone": "01729-649930",
+    "email": "imran.hossen@roamingbd.com",
+    "secondaryEmail": "imran.hossen@mindmentoroverseas.com",
+    "website": "https://roamingbd.com/",
+    "address": {
+      "street": "House-25 (2nd Floor), Road-02, Sector-03, opposite of Shopno, Rajlokkhi, Uttara",
+      "city": "Dhaka",
+      "country": "Bangladesh",
+      "full": "House-25 (2nd Floor), Road-02, Sector-03, opposite of Shopno, Rajlokkhi, Uttara, Dhaka, Bangladesh"
+    }
+  },
+  "social": {
+    "linkedin": "http://linkedin.com/in/imran-hossen-1284b8b7",
+    "facebook": "https://www.facebook.com/imran.hossen2",
+    "github": "",
+    "portfolio": "",
+    "whatsappNumber": "8801729649930"
+  },
+  "assets": {
+    "companyLogo": "./Photos/RTTLOGO.png",
+    "profileImage": "./Photos/Kamran.png",
+    "lightBackground": "./Photos/RoamingBackground.jpg",
+    "darkBackground": "./Photos/DarkMOOD.png",
+    "favicon": "./Photos/Rlogo.png"
+  },
+  "theme": {
+    "primaryColor": "#884dff",
+    "secondaryColor": "#33aaff",
+    "accentColor": "#ff6b6b"
+  },
+  "animation": {
+    "notificationDuration": 3000,
+    "transitionDelay": 100,
+    "iconRotationDelay": 150
+  },
+  "meta": {
+    "title": "E-Card - Digital Business Card",
+    "description": "Professional digital business card for M S Kamran, Software Engineer at Roaming BD",
+    "author": "M S Kamran",
+    "version": "2.0.0",
+    "lastUpdated": "2024-12-19"
+  }
+}
