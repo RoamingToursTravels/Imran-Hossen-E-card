@@ -21,8 +21,7 @@ e-card updated copy/
 │   └── RoamingBackground.jpg # Light mode background
 ├── index.html               # Main HTML file
 ├── ecard.css                 # Stylesheet
-├── ecard.js                  # JavaScript functionality
-├── config.json               # Configuration data
+├── ecard.js                  # JavaScript functionality (includes configuration)
 └── README.md                 # Documentation
 ```
 
@@ -30,44 +29,45 @@ e-card updated copy/
 
 ### 1. Personal Information
 
-Edit the `config.json` file to update personal details:
+Edit the `ECARD_CONFIG` object in `ecard.js` file to update personal details:
 
-```json
-{
-  "personal": {
-    "name": "Your Name",
-    "organization": "Your Company",
-    "title": "Your Job Title",
-    "department": "Your Department",
-    "employeeId": "Your ID",
-    "officePhone": "Your Office Phone",
-    "personalPhone": "Your Personal Phone",
-    "email": "your.email@company.com",
-    "website": "https://yourwebsite.com/",
-    "address": {
-      "street": "Your Street Address",
-      "city": "Your City",
-      "country": "Your Country",
-      "full": "Complete Address"
+```javascript
+const ECARD_CONFIG = {
+    PERSONAL: {
+        name: 'Your Name',
+        organization: 'Your Company',
+        title: 'Your Job Title',
+        secondaryOrganization: 'Your Secondary Company',
+        secondaryTitle: 'Your Secondary Title',
+        officePhone: 'Your Office Phone',
+        personalPhone: 'Your Personal Phone',
+        email: 'your.email@company.com',
+        secondaryEmail: 'your.secondary@email.com',
+        website: 'https://yourwebsite.com/',
+        address: {
+            street: 'Your Street Address',
+            city: 'Your City',
+            country: 'Your Country'
+        }
     }
-  }
-}
+};
 ```
 
 ### 2. Social Media Links
 
-Update social media profiles in `config.json`:
+Update social media profiles in the `ECARD_CONFIG` object in `ecard.js`:
 
-```json
-{
-  "social": {
-    "linkedin": "https://linkedin.com/in/yourprofile",
-    "facebook": "https://facebook.com/yourprofile",
-    "github": "https://github.com/yourusername",
-    "portfolio": "https://yourportfolio.com",
-    "whatsappNumber": "your-whatsapp-number"
-  }
-}
+```javascript
+const ECARD_CONFIG = {
+    // ... other config
+    SOCIAL: {
+        linkedin: 'https://linkedin.com/in/yourprofile',
+        facebook: 'https://facebook.com/yourprofile',
+        github: 'https://github.com/yourusername',
+        portfolio: 'https://yourportfolio.com',
+        whatsappNumber: 'your-whatsapp-number'
+    }
+};
 ```
 
 ### 3. Image Assets
@@ -79,31 +79,30 @@ Replace images in the `Photos/` folder:
 - **Favicon:** Replace `Rlogo.png` with your favicon
 - **Backgrounds:** Replace `RoamingBackground.jpg` and `DarkMOOD.png`
 
-Update paths in `config.json`:
+Update paths in the `ECARD_CONFIG` object in `ecard.js`:
 
-```json
-{
-  "assets": {
-    "companyLogo": "./Photos/your-logo.png",
-    "profileImage": "./Photos/your-photo.png",
-    "lightBackground": "./Photos/your-light-bg.jpg",
-    "darkBackground": "./Photos/your-dark-bg.png",
-    "favicon": "./Photos/your-favicon.png"
-  }
-}
+```javascript
+const ECARD_CONFIG = {
+    // ... other config
+    ASSETS: {
+        companyLogo: './Photos/your-logo.png',
+        profileImage: './Photos/your-photo.png',
+        lightBackground: './Photos/your-light-bg.jpg',
+        darkBackground: './Photos/your-dark-bg.png',
+        favicon: './Photos/your-favicon.png'
+    }
+};
 ```
 
 ### 4. Theme Colors
 
-Customize colors in `config.json`:
+Customize colors directly in the CSS file `ecard.css` by modifying the CSS variables:
 
-```json
-{
-  "theme": {
-    "primaryColor": "#your-primary-color",
-    "secondaryColor": "#your-secondary-color",
-    "accentColor": "#your-accent-color"
-  }
+```css
+body {
+    --primary-color: #your-primary-color;
+    --secondary-color: #your-secondary-color;
+    --accent-color: #your-accent-color;
 }
 ```
 
@@ -178,7 +177,7 @@ const ECARD_CONFIG = {
 
 1. **Clone/Download** the project files
 2. **Replace images** in the `Photos/` folder
-3. **Update** `config.json` with your information
+3. **Update** the `ECARD_CONFIG` object in `ecard.js` with your information
 4. **Modify** HTML content if needed
 5. **Customize** CSS colors and styles
 6. **Test** in browser
