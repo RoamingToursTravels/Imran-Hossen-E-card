@@ -1,5 +1,6 @@
 [build]
   # No build command needed for static site
+  # command = "" # Explicitly empty for static sites
   publish = "."
 
 [build.environment]
