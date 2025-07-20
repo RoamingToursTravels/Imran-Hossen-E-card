@@ -5,88 +5,73 @@
  * Description: Interactive functionality for digital business card
  */
 
-// ===== CONFIGURATION CONSTANTS =====
+// ===== DATA SCRAPING =====
 /**
- * CENTRALIZED EMPLOYEE CONFIGURATION
- * 
- * To update employee information:
- * 1. Modify the values in this ECARD_CONFIG object
- * 2. All changes will automatically update throughout the entire application
- * 3. This includes the HTML display, vCard file generation, and social links
- * 
- * No need to edit HTML files or search for hardcoded values!
+ * Scrapes employee information directly from the HTML document.
+ * This makes the card easily updatable by just changing the HTML.
+ * @returns {object} - An object containing the employee's information.
  */
-const ECARD_CONFIG = {
-    // Personal Information
-    PERSONAL: {
-        name: 'Imran Hossen',
-        organization: 'Mind Mentor Overseas Ltd',
-        title: 'Executive Director (ED)',
-        secondaryOrganization: 'Roaming Tours & Travels',
-        secondaryTitle: 'Head Of Business (HOB)',
-        officePhone: '8801332547044',
-        personalPhone: '01729-649930',
-        email: 'imran.hossen@roamingbd.com',
-        secondaryEmail: 'imran.hossen@mindmentoroverseas.com',
-        website: 'https://roamingbd.com/',
-        address: {
-            street: 'House-25 (2nd Floor), Road-02, Sector-03, opposite of Shopno, Rajlokkhi, Uttara',
-            city: 'Dhaka',
-            country: 'Bangladesh'
-        }
-    },
-    
-    // Social Media Links
-    SOCIAL: {
-        linkedin: 'http://linkedin.com/in/imran-hossen-1284b8b7',
-        facebook: 'https://www.facebook.com/imran.hossen2',
-        github: '',
-        portfolio: '',
-        whatsappNumber: '8801729649930'
-    },
-    
-    // File Paths
-    ASSETS: {
-        companyLogo: './Photos/RTTLOGO.png',
-        profileImage: './Photos/employee.jpeg',
-        lightBackground: './Photos/RoamingBackground.jpg',
-        darkBackground: './Photos/DarkMOOD.png',
-        favicon: './Photos/Rlogo.png'
-    },
-    
-    // Animation Settings
-    ANIMATION: {
-        notificationDuration: 3000,
-        transitionDelay: 100,
-        iconRotationDelay: 150
-    }
-};
+function getEmployeeInfo() {
+    const getElementText = (id) => document.getElementById(id)?.textContent.trim() || '';
+    const getElementHref = (id) => document.getElementById(id)?.href.trim() || '';
+
+    const roleText = getElementText('ecard-role');
+    const departmentText = getElementText('ecard-department');
+
+    // Extract title and organization from the role and department strings
+    const extractInfo = (text) => {
+        const parts = text.split(' at ');
+        return {
+            title: parts[0] || '',
+            organization: parts[1] || ''
+        };
+    };
+
+    const primary = extractInfo(roleText);
+    const secondary = extractInfo(departmentText);
+
+    return {
+        name: getElementText('ecard-name'),
+        title: primary.title,
+        organization: primary.organization,
+        secondaryTitle: secondary.title,
+        secondaryOrganization: secondary.organization,
+        officePhone: getElementText('ecard-office-phone').replace('Office: ', ''),
+        personalPhone: getElementText('ecard-personal-phone').replace('Personal: ', ''),
+        email: getElementText('ecard-email'),
+        secondaryEmail: getElementText('ecard-secondary-email'),
+        website: getElementHref('ecard-website'),
+        address: getElementText('ecard-address'),
+        linkedin: getElementHref('ecard-linkedin'),
+        facebook: getElementHref('ecard-facebook'),
+        whatsappNumber: getElementText('ecard-personal-phone').replace('Personal: ', '').replace(/[^0-9]/g, '')
+    };
+}
 
 // ===== CONTACT MANAGEMENT =====
 /**
- * Generates and downloads a vCard contact file, with an improved method for iOS.
+ * Generates and downloads a vCard contact file.
  */
 function saveContact() {
-    const { PERSONAL } = ECARD_CONFIG;
+    const employee = getEmployeeInfo();
 
-    const nameParts = PERSONAL.name.split(' ');
+    const nameParts = employee.name.split(' ');
     const lastName = nameParts.pop() || '';
     const firstName = nameParts.join(' ');
 
     const vCard = `BEGIN:VCARD
 VERSION:3.0
-FN:${PERSONAL.name}
+FN:${employee.name}
 N:${lastName};${firstName};;;
-ORG:${PERSONAL.organization}
-TITLE:${PERSONAL.title}
-TEL;TYPE=WORK,VOICE:${PERSONAL.officePhone}
-TEL;TYPE=CELL,VOICE:${PERSONAL.personalPhone}
-EMAIL:${PERSONAL.email}
-URL:${PERSONAL.website}
-ADR;TYPE=WORK:;;${PERSONAL.address.street};${PERSONAL.address.city};;${PERSONAL.address.country}
+ORG:${employee.organization}
+TITLE:${employee.title}
+TEL;TYPE=WORK,VOICE:${employee.officePhone}
+TEL;TYPE=CELL,VOICE:${employee.personalPhone}
+EMAIL:${employee.email}
+URL:${employee.website}
+ADR;TYPE=WORK:;;${employee.address};;;
 END:VCARD`;
 
-    // Safari, iOS, and Android devices have issues with the download attribute on blob URLs.
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     const isAndroid = /android/i.test(navigator.userAgent);
 
@@ -95,12 +80,10 @@ END:VCARD`;
         const url = window.URL.createObjectURL(blob);
 
         if (isSafari || isAndroid) {
-            // For Safari/iOS/Android, redirecting is a more reliable way to trigger the import prompt.
             window.location.href = url;
         } else {
-            // For other browsers, the download attribute works well.
             const downloadLink = document.createElement('a');
-            const fileName = `${PERSONAL.name.toLowerCase().replace(/\s+/g, '-')}-contact.vcf`;
+            const fileName = `${employee.name.toLowerCase().replace(/\s+/g, '-')}-contact.vcf`;
             
             downloadLink.href = url;
             downloadLink.download = fileName;
@@ -121,14 +104,14 @@ END:VCARD`;
 
 // ===== WHATSAPP INTEGRATION =====
 /**
- * Opens WhatsApp chat with predefined message
+ * Opens WhatsApp chat with a predefined message.
  */
 function openWhatsApp() {
-    const { whatsappNumber } = ECARD_CONFIG.SOCIAL;
+    const employee = getEmployeeInfo();
     const message = 'Hello! I found your contact through your digital business card.';
     
     try {
-        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/${employee.whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     } catch (error) {
         console.error('Error opening WhatsApp:', error);
@@ -150,73 +133,57 @@ function initDarkMode() {
         return;
     }
     
-    // Check for saved dark mode preference
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
     
-    // Apply saved preference
     if (isDarkMode) {
         body.classList.add('dark-mode');
         updateDarkModeIcon(icon, true);
     }
     
-    // Add click event listener
     darkModeToggle.addEventListener('click', function() {
         toggleDarkMode(body, icon, darkModeToggle);
     });
     
-    // Add smooth transition to icon
     icon.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
 }
 
 /**
  * Toggles between light and dark mode
- * @param {HTMLElement} body - Document body element
- * @param {HTMLElement} icon - Toggle button icon element
- * @param {HTMLElement} toggleButton - Toggle button element
  */
 function toggleDarkMode(body, icon, toggleButton) {
     const bgPattern = document.querySelector('.ecard-bg-pattern');
-    const { ANIMATION } = ECARD_CONFIG;
     
     if (!bgPattern) return;
     
-    // Add fade effect during transition
     bgPattern.style.opacity = '0.7';
     
     setTimeout(() => {
-        // Toggle dark mode class
         body.classList.toggle('dark-mode');
         const isDark = body.classList.contains('dark-mode');
         
-        // Update icon with smooth rotation
         icon.style.transform = 'rotate(180deg)';
         
         setTimeout(() => {
             updateDarkModeIcon(icon, isDark);
             icon.style.transform = 'rotate(0deg)';
-        }, ANIMATION.iconRotationDelay);
+        }, 150);
         
-        // Save preference to localStorage
         localStorage.setItem('darkMode', isDark.toString());
         
-        // Restore background opacity
         setTimeout(() => {
             bgPattern.style.opacity = '1';
-        }, ANIMATION.transitionDelay);
+        }, 100);
         
-    }, ANIMATION.transitionDelay);
+    }, 100);
     
-    // Add button press animation
     toggleButton.style.transform = 'scale(0.9)';
     setTimeout(() => {
         toggleButton.style.transform = '';
-    }, ANIMATION.iconRotationDelay);
+    }, 150);
 }
 
 /**
  * Updates dark mode toggle icon
- * @param {HTMLElement} icon - Icon element to update
- * @param {boolean} isDark - Whether dark mode is active
  */
 function updateDarkModeIcon(icon, isDark) {
     if (isDark) {
@@ -231,8 +198,6 @@ function updateDarkModeIcon(icon, isDark) {
 // ===== NOTIFICATION SYSTEM =====
 /**
  * Displays modern notification messages
- * @param {string} message - Notification message
- * @param {string} type - Notification type (success, danger, info, warning)
  */
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
@@ -243,7 +208,6 @@ function showNotification(message, type = 'info') {
         info: 'info-circle'
     };
     
-    // Create notification element
     notification.className = `alert alert-${type} position-fixed`;
     notification.style.cssText = `
         top: 20px;
@@ -261,10 +225,8 @@ function showNotification(message, type = 'info') {
         <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
     `;
     
-    // Add to DOM
     document.body.appendChild(notification);
     
-    // Auto remove after specified duration
     setTimeout(() => {
         if (notification.parentElement) {
             notification.style.animation = 'slideOutRight 0.3s ease';
@@ -274,7 +236,7 @@ function showNotification(message, type = 'info') {
                 }
             }, 300);
         }
-    }, ECARD_CONFIG.ANIMATION.notificationDuration);
+    }, 3000);
 }
 
 // ===== ANIMATION SYSTEM =====
@@ -310,97 +272,12 @@ function initSocialButtonEffects() {
     });
 }
 
-// ===== DYNAMIC CONTENT POPULATION =====
-/**
- * Populates HTML elements with data from ECARD_CONFIG
- * This ensures all employee information is centralized in one place
- */
-function populateEmployeeInfo() {
-    const { PERSONAL, SOCIAL, ASSETS } = ECARD_CONFIG;
-    
-    try {
-        // Update profile image
-        const profileImg = document.querySelector('.ecard-photo-img');
-        if (profileImg) {
-            profileImg.src = ASSETS.profileImage;
-            profileImg.alt = PERSONAL.name;
-        }
-        
-        // Update company logo
-        const companyLogo = document.querySelector('.ecard-logo');
-        if (companyLogo) {
-            companyLogo.src = ASSETS.companyLogo;
-        }
-        
-        // Update name and title
-        const nameElement = document.querySelector('.ecard-name');
-        if (nameElement) {
-            nameElement.textContent = PERSONAL.name;
-        }
-        
-        const roleElement = document.querySelector('.ecard-role');
-        if (roleElement) {
-            roleElement.textContent = `${PERSONAL.title} at ${PERSONAL.organization}`;
-        }
-        
-        const departmentElement = document.querySelector('.ecard-department');
-        if (departmentElement && PERSONAL.secondaryTitle && PERSONAL.secondaryOrganization) {
-            departmentElement.textContent = `${PERSONAL.secondaryTitle} at ${PERSONAL.secondaryOrganization}`;
-        }
-        
-        // Contact information is already correctly set in HTML, so we skip dynamic population
-        // to avoid duplication. The HTML contains:
-        // - Office: 8801332547044
-        // - Personal: 01729-649930  
-        // - Email: imran.hossen@roamingbd.com
-        // - Secondary Email: imran.hossen@mindmentoroverseas.com
-        
-        // Update social media links
-        const socialLinks = document.querySelectorAll('.ecard-social-btn');
-        if (socialLinks.length >= 2) {
-            socialLinks[0].href = SOCIAL.linkedin; // LinkedIn
-            socialLinks[1].href = SOCIAL.facebook; // Facebook
-            // Note: GitHub and Portfolio links removed as they are empty for this user
-        }
-        
-        // Update address
-        const addressLink = document.querySelector('.ecard-address-link');
-        if (addressLink) {
-            const fullAddress = `${PERSONAL.address.street}, ${PERSONAL.address.city}, ${PERSONAL.address.country}`;
-            addressLink.textContent = fullAddress;
-        }
-        
-        // Update website
-        const websiteLink = document.querySelector('.ecard-website a');
-        if (websiteLink) {
-            websiteLink.href = PERSONAL.website;
-            websiteLink.textContent = PERSONAL.website.replace('https://', '').replace('http://', '');
-        }
-        
-        // Update page title and meta description
-        document.title = `E-Card - ${PERSONAL.name}`;
-        const metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-            metaDescription.content = `Digital Business Card - ${PERSONAL.name}, ${PERSONAL.title}`;
-        }
-        
-    } catch (error) {
-        console.error('Error populating employee info:', error);
-        showNotification('Error loading employee information.', 'warning');
-    }
-}
-
 // ===== INITIALIZATION =====
 /**
  * Main initialization function
- * Runs when DOM content is loaded
  */
 function initECard() {
     try {
-        // Populate employee information from config
-        populateEmployeeInfo();
-        
-        // Initialize core functionality
         initDarkMode();
         initAnimations();
         initSocialButtonEffects();
@@ -413,26 +290,21 @@ function initECard() {
 }
 
 // ===== EVENT LISTENERS =====
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', initECard);
 
-// Handle page visibility changes for performance
 document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
-        // Page is hidden - pause animations if needed
         console.log('Page hidden - optimizing performance');
     } else {
-        // Page is visible - resume normal operation
         console.log('Page visible - resuming normal operation');
     }
 });
 
-// Export functions for global access (if needed)
+// Export functions for global access
 if (typeof window !== 'undefined') {
     window.ECard = {
         saveContact,
         openWhatsApp,
-        showNotification,
-        config: ECARD_CONFIG
+        showNotification
     };
 }
